@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.fft import fft, fftfreq
+from scipy.io.wavfile import write as wave_write
 import matplotlib.pyplot as plt
 plt.figure("Analyze Sound", facecolor='black', edgecolor='black')
 plt.rcParams['figure.facecolor'] = 'black'
@@ -52,6 +53,8 @@ waveform = np.concatenate([tone(f, 0.2) for f in noise_seq + start_seq + payload
 # play the waveform
 sd.play(waveform, FS)
 sd.wait()
+# save to wav file
+wave_write("demo.wav", FS, waveform.astype(np.float32))
 
 # ok. try to decode it
 def fft_analyze(buffer):
