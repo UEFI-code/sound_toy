@@ -87,7 +87,7 @@ while True:
         # plt.xlabel("Frequency (Hz)")
         # plt.xlim(0, 1000)
         # plt.pause(0.01)
-    print("Detected freq sequence: ", det_freq_seq)
+    #print("Detected freq sequence: ", det_freq_seq)
     if not freq_seq_cmp(det_freq_seq, start_seq_def):
         time.sleep(symbol_time / 20)
         continue
@@ -100,4 +100,4 @@ while True:
         xf, yf, top_freq, top_energies = fft_analyze(frag)
         det_freq_seq.append(top_freq[0].astype(int).item())
     print("Detected payload freq sequence: ", det_freq_seq)
-    break
+    time.sleep(symbol_time)
