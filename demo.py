@@ -46,9 +46,10 @@ def tone(freq, duration):
 start_seq = [1000, 3000, 600, 4000, 2000]
 payload_seq = [4000, 1000, 4000, 1000]
 noise_seq = [200, 50, 100, 300]
+symbol_time = 0.2
 
-# gen the waveform, symbol time is 0.2s
-waveform = np.concatenate([tone(f, 0.2) for f in noise_seq + start_seq + payload_seq])
+# gen the waveform
+waveform = np.concatenate([tone(f, symbol_time) for f in noise_seq + start_seq + payload_seq])
 
 # play the waveform
 sd.play(waveform, FS)
@@ -77,12 +78,12 @@ def freq_seq_cmp(seq1, seq2, tol=50):
             return False
     return True
 
-# step 1: find the start sequence. we know it's len(start_seq) * 0.2 seconds long
-start_seq_time_len = len(start_seq) * 0.2
+# step 1: find the start sequence
+start_seq_time_len = len(start_seq) * symbol_time
 start_seq_data_len = int(start_seq_time_len * FS)
 real_truck = None
 # swap window to find the start sequence.
-for i in range(0, len(waveform) - start_seq_data_len, int(FS * 0.01)):
+for i in range(0, len(waveform) - start_seq_data_len, int(FS * symbol_time / 20)):
     window = waveform[i:i+start_seq_data_len]
     # plt.clf()
     # plt.plot(window)
