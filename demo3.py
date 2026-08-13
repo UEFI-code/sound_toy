@@ -112,17 +112,20 @@ while True:
     # split it to len(payload_seq) pieces, and do fft on each piece
     frags = np.split(payload_chunk, len(payload_seq_def))
     det_freq_seq = []
-    for frag in frags:
+    for i, frag in enumerate(frags):
         xf, yf, top_freq, top_energies = fft_analyze(frag)
+        if i == 0 and top_freq[0] in range(start_seq_def[-1] - 50, start_seq_def[-1] + 50):
+            print("Warn: unaligned payload detected. will retry...")
+            break
         if top_freq[0] not in payload_freq_range:
             print("Warn: payload freq not in payload range. That might be interference by noise")
             print("Top frequencies:", top_freq, "Energies:", top_energies)
             top_freq = top_freq[1:]
         det_freq_seq.append(top_freq[0].astype(int).item())
-    print("Detected payload freq sequence: ", det_freq_seq)
-    if det_freq_seq[0] in range(start_seq_def[-1] - 50, start_seq_def[-1] + 50):
-        print("Warn: unaligned payload detected. will retry...")
+    if len(det_freq_seq) == 0:
+        time.sleep(symbol_time / 20)
         continue
+    print("Detected payload freq sequence: ", det_freq_seq)
     payload_bytes = decode_payload(det_freq_seq)
     if payload_bytes is None:
         print("Warn: failed to decode payload. will retry...")
