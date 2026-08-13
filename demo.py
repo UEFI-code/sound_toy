@@ -43,9 +43,9 @@ def tone(freq, duration):
     t = np.arange(n) / FS
     return np.sin(2 * np.pi * freq * t)
 
-start_seq = [1000, 3000, 600, 4000, 2000]
-payload_seq = [4000, 1000, 4000, 1000]
-noise_seq = [200, 50, 100, 300]
+start_seq = [1000, 3000, 600, 4000]
+payload_seq = [6000, 9000, 13000, 15000]
+noise_seq = [200, 50, 100]
 symbol_time = 0.2
 
 # gen the waveform

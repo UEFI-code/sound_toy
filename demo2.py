@@ -18,8 +18,8 @@ CHANNELS = 1
 CHUNK_SIZE = 4096
 
 symbol_time = 0.2
-start_seq_def = [1000, 3000, 600, 4000, 2000]
-payload_seq_def = [4000, 1000, 4000, 1000]
+start_seq_def = [1000, 3000, 600, 4000]
+payload_seq_def = [6000, 9000, 13000, 15000]
 
 cache_time_len = len(start_seq_def + payload_seq_def) * symbol_time
 cache_data_len = int(cache_time_len * FS)
@@ -100,4 +100,7 @@ while True:
         xf, yf, top_freq, top_energies = fft_analyze(frag)
         det_freq_seq.append(top_freq[0].astype(int).item())
     print("Detected payload freq sequence: ", det_freq_seq)
+    if det_freq_seq[0] in range(start_seq_def[-1] - 50, start_seq_def[-1] + 50):
+        print("Warn: unaligned payload detected. will retry...")
+        continue
     time.sleep(symbol_time)
